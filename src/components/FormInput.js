@@ -9,7 +9,7 @@ class FormInput extends React.Component {
                <input type="text" 
                style={input}
                placeholder="Add Task"/>
-               <Button/>
+               <Button text="Add" variant="primary"/>
            </form>
        ) 
     }

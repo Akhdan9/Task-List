@@ -4,7 +4,22 @@ import './App.css';
 import FormInput from './components/FormInput';
 import Item from './components/Item';
 
-function App() {
+class App extends React.Component {
+  state = {
+    todos : [
+      {
+        id: 1,
+        title: "Read a book"
+      },
+      {
+        id: 2,
+        title: "Good Way"
+      }
+    ]
+  }
+  
+  render(){
+    const { todos } = this.state;
   return (
     <div className="app">
       <div className="logo">
@@ -12,13 +27,17 @@ function App() {
         <h3>Task List</h3>
       </div>
       <div className="list">
-        <Item/>
+        {todos.map(item =>
+
+        <Item key={item.id} todo={item}/>
+        )}
       </div>
-      <div>
+      <div className="input-form">
         <FormInput/>
       </div>
     </div>
   );
+  }
 }
 
 export default App;
