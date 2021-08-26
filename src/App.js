@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import FormInput from './components/FormInput';
 import Item from './components/Item';
+import EditModal from './components/EditModal'
 
 class App extends React.Component {
   state = {
@@ -15,7 +16,69 @@ class App extends React.Component {
         id: 2,
         title: "Good Way"
       }
-    ]
+    ],
+    isEdit: false,
+    editData : {
+      id: "",
+      title: ""
+    }
+  }
+
+  update = () => {
+    const { id, title } = this.state.editData
+    const newData = { id, title }
+    const newTodos = this.state.todos
+    newTodos.splice((id-1), 1, newData)
+    this.setState({
+      todos:newTodos,
+      isEdit: false,
+      editData : {
+        id: "",
+        title: ""
+      }
+    })
+  }
+
+  setTitle = e => {
+    this.setState({
+      editData: {
+        ...this.state.editData,
+        title : e.target.value
+      }
+    })
+  }
+
+  openModal = (id, data) => {
+    this.setState({
+      isEdit:true,
+      editData : {
+        id,
+        title:data
+      }
+    })
+  }
+
+  closeModal = () => {
+    this.setState({
+      isEdit:false
+    })
+  }
+
+  deleteTask = id => {
+    this.setState({
+      todos: this.state.todos.filter(item => item.id !== id)
+    })
+  }
+
+  addTask = data => {
+    const id = this.state.todos.length
+    const newData = {
+      id : id + 1,
+      title : data
+    }
+    this.setState({
+      todos: [...this.state.todos, newData]
+    })
   }
   
   render(){
@@ -28,13 +91,23 @@ class App extends React.Component {
       </div>
       <div className="list">
         {todos.map(item =>
-
-        <Item key={item.id} todo={item}/>
+        <Item 
+        key={item.id} 
+        todo={item} 
+        del={this.deleteTask}
+        open={this.openModal}/>
         )}
       </div>
       <div className="input-form">
-        <FormInput/>
+        <FormInput add={this.addTask}/>
       </div>
+      <EditModal 
+      edit={this.state.isEdit} 
+      close={this.closeModal} 
+      change={this.setTitle}
+      data= {this.state.editData}
+      update={this.update}
+      />
     </div>
   );
   }
